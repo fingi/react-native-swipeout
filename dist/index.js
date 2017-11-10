@@ -224,7 +224,11 @@ var Swipeout = (0, _createReactClass2.default)({
     if (this.props.scroll) {
       if (moveX) this.props.scroll(false);else this.props.scroll(true);
     }
-    if (this.state.swiping) {
+
+    var chkDy = Math.abs(gestureState.dy) < 100
+    var chkDx = Math.abs(posX) > 50
+
+    if (this.state.swiping && chkDy && chkDx) {
       //  move content to reveal swipeout
       if (posX < 0 && this.props.right) {
         this.setState({ contentPos: Math.min(posX, 0) });
@@ -263,10 +267,15 @@ var Swipeout = (0, _createReactClass2.default)({
       var openLeft = posX > openX / 10 && !this.state.openedRight;
     }
 
+    var chkDy = Math.abs(gestureState.dy) < 30
+
+    //console.log("React-native-swipeout > _handlePanResponderEnd dx", gestureState.dx)
+    //console.log("React-native-swipeout > _handlePanResponderEnd dy", gestureState.dy, chkDy)
+
     if (this.state.swiping) {
-      if (openRight && contentPos < 0 && posX < 0) {
+      if (openRight && contentPos < 0 && posX < 0 && chkDy) {
         this._open(-btnsRightWidth, 'right');
-      } else if (openLeft && contentPos > 0 && posX > 0) {
+      } else if (openLeft && contentPos > 0 && posX > 0 && chkDy) {
         this._open(btnsLeftWidth, 'left');
       } else {
         this._close();
